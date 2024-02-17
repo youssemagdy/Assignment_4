@@ -1,109 +1,116 @@
-import 'package:contacts/model/person.dart';
+import 'package:contacts/model/contact.dart';
+import 'package:contacts/widget/contacts_card.dart';
+import 'package:contacts/widget/text_field.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  final String? hintText;
-  const HomePage({Key? key, this.hintText }) : super(key: key);
+class HomePage extends StatefulWidget
+{
+  const HomePage({Key? key}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
-  List<Person> listOfData = [
-    Person(),
-    Person(),
-    Person(),
+  List<Contact> contactsList =
+  [
+    Contact(),
+    Contact(),
+    Contact(),
   ];
+  TextEditingController name = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  int counter = 0;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey,
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF168ff7),
-          title: const Text('Contacts Screen', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
-          centerTitle: true,
-        ),
-        body: Column(
+    return Scaffold(
+      backgroundColor: const Color(0xFF9e9e9e),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2196f3),
+        title: const Text('Contacts Screen', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    suffixIcon: const Icon(Icons.edit, color: Colors.blue,),
-                    hintText: 'Enter Your Name Here',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[500],
-                      fontSize: 15,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(width: 2.5, color: Colors.blue),
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(width: 2.5),
-                  ),
-                ),
+              padding: const EdgeInsets.only(right: 10, left: 10, top: 30),
+              child: TextFiled(
+                controller: name,
+                hintText: 'Enter Your Name Here',
+                suffixIcon: const Icon(Icons.edit, size: 20, color: Colors.blue,),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3),
-              child: TextField(
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    suffixIcon: const Icon(Icons.call, color: Colors.blue,),
-                    hintText: 'Enter Your Phone Number Here',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[500],
-                      fontSize: 15,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(width: 2.5, color: Colors.blue),
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(width: 2.5),
-                  ),
-                ),
+              padding: const EdgeInsets.only(right: 10, left: 10, top: 20),
+              child: TextFiled(
+                controller: phone,
+                hintText: 'Enter Your Number Here',
+                suffixIcon: const Icon(Icons.call, size: 20, color: Colors.blue,),
               ),
             ),
-            // padding button
+            const SizedBox(height: 35,),
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 40),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Row(
                 children: [
                   Expanded(
                     child: FilledButton(
-                        onPressed: (){},
-                        style: FilledButton.styleFrom(backgroundColor: const Color(0xFf2196f3),),
-                        child: const Text('Add', style: TextStyle(color: Colors.black, fontSize: 20),),
+                      onPressed: ()
+                      {
+                        if (counter < 3)
+                        {
+                          contactsList[counter] = Contact(visibility: true, name: name.text, phone: phone.text);
+                          counter++;
+                          name.clear();
+                          phone.clear();
+                          setState(() {
+
+                          });
+                        }
+                      },
+                      style: FilledButton.styleFrom(backgroundColor: const Color(0xFF2196f3),),
+                      child: const Text(
+                        'Add',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 27,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 6,),
+                  const SizedBox(width: 5,),
                   Expanded(
                     child: FilledButton(
-                      onPressed: (){},
-                      style: FilledButton.styleFrom(backgroundColor: const Color(0xFFff5252)),
-                      child: const Text('Delete', style: TextStyle(color: Colors.black, fontSize: 20),),
+                      onPressed: ()
+                      {
+                        if (counter > 0)
+                        {
+                          contactsList[counter - 1] = Contact();
+                          counter --;
+                          setState(() {
+
+                          });
+                        }
+                      },
+                      style: FilledButton.styleFrom(backgroundColor:  const Color(0xFFff5252).withOpacity(0.9),),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 27,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Visibility(
-              visible: listOfData[0].visibilty,
-              child: Container(),
-            )
+            const SizedBox(height: 35,),
+            ContactsCard(contact: contactsList[0]),
+            ContactsCard(contact: contactsList[1]),
+            ContactsCard(contact: contactsList[2]),
           ],
         ),
       ),
