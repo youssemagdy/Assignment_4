@@ -2,22 +2,14 @@ import 'package:flutter/material.dart';
 
 class TextFiled1 extends StatelessWidget
 {
-  const TextFiled1({
-    Key? key,
-    this.hintText,
-    this.suffixIcon,
-    required this.controller,
-    required this.validator
-  }) : super(key: key);
+  const TextFiled1({Key? key, this.hintText, this.suffixIcon, required this.controller}) : super(key: key);
   final String? hintText;
   final Widget? suffixIcon;
   final TextEditingController controller;
-  final String? Function (String?)? validator;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       controller: controller,
-      validator: validator,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
@@ -45,8 +37,8 @@ class TextFiled1 extends StatelessWidget
           borderRadius: BorderRadius.circular(30),
           borderSide: const BorderSide(
             width: 2.5,
-          ),
-        ),
+          )
+        )
       ),
     );
   }
